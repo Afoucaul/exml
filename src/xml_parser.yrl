@@ -1,37 +1,53 @@
 Terminals equals open close slash string identifier.
-Nonterminals opening_tag closing_tag orphan_tag tree list_of_trees list_of_attributes attribute.
+Nonterminals opening_tag closing_tag orphan_tag tree trees node list_of_attributes attribute.
 Rootsymbol tree.
 
 tree ->
-        orphan_tag : "orphan tag as tree".
-
+        orphan_tag : io:fwrite("tree\n"), make_tree('$1', []).
 tree ->
-        opening_tag closing_tag : 1.
-
+        opening_tag closing_tag : io:fwrite("tree\n"), make_tree('$1', []).
 tree ->
-        opening_tag list_of_trees closing_tag : nil.
+        opening_tag trees closing_tag : io:fwrite("tree\n"), make_tree('$1', '$2').
 
-list_of_trees ->
-        tree : nil.
-
-list_of_trees ->
-        tree list_of_trees : nil.
+trees ->
+        tree : io:fwrite("trees\n"), ['$1'].
+trees ->
+        tree trees : io:fwrite("trees\n"), ['$1' | '$2'].
 
 opening_tag ->
-        open identifier close : nil.
-
+        open identifier close : io:fwrite("opening tag\n"), tag('$2', #{}).
 opening_tag ->
-        open identifier list_of_attributes close : nil.
+        open identifier list_of_attributes close : io:fwrite("opening tag\n"), tag('$2', '$3').
 
-closing_tag -> open slash identifier close : nil.
+closing_tag -> 
+        open slash identifier close : io:fwrite("closing tag\n"), tag('$3', #{}).
 
-orphan_tag -> open identifier slash close : nil.
-orphan_tag -> open identifier list_of_attributes slash close : nil.
+orphan_tag -> 
+        open identifier slash close : io:fwrite("orphan tag\n"), tag('$2', #{}).
+orphan_tag -> 
+        open identifier list_of_attributes slash close : io:fwrite("orphan tag\n"), tag('$2', '$3').
 
-list_of_attributes -> attribute : nil.
-list_of_attributes -> attribute list_of_attributes : nil.
+list_of_attributes -> 
+        attribute : '$1'.
+list_of_attributes -> 
+        attribute list_of_attributes : maps:merge('$1', '$2').
 
-attribute -> identifier : nil.
-attribute -> identifier equals string : nil.
+attribute -> 
+        identifier : attribute('$1').
+attribute -> 
+        identifier equals string : attribute('$1', '$3').
+
 
 Erlang code.
+
+make_tree({Name, Attributes}, Children) ->
+        {Name, Attributes, Children}.
+
+tag({identifier, _, Name}, Attributes) ->
+        {Name, Attributes}.
+
+attribute({identifier, _, Name}) ->
+        #{Name => nil}.
+
+attribute({identifier, _, Name}, {string, _, Value}) ->
+        #{Name => Value}.
