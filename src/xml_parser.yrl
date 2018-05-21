@@ -12,7 +12,7 @@ tree ->
 trees ->
         tree : io:fwrite("trees\n"), ['$1'].
 trees ->
-        tree trees : io:fwrite("trees\n"), ['$1' | '$2'].
+        trees tree : io:fwrite("trees\n"), ['$2' | '$1'].
 
 opening_tag ->
         open identifier close : io:fwrite("opening tag\n"), tag('$2', #{}).
