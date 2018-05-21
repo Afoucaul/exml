@@ -41,7 +41,7 @@ attribute ->
 Erlang code.
 
 make_tree({Name, Attributes}, Children) ->
-        {Name, Attributes, Children}.
+        {Name, Attributes, lists:reverse(Children)}.
 
 tag({identifier, _, Name}, Attributes) ->
         {Name, Attributes}.
