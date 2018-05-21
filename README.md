@@ -15,7 +15,7 @@ There is no guarantee of performance when working on large XML files.
 
 ## Examples
 
-```iex
+```elixir
 iex> ExML.parse(~S(
 ...>   <a foo="bar">
 ...>     <b bar="baz">
