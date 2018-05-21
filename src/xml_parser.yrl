@@ -3,29 +3,29 @@ Nonterminals opening_tag closing_tag orphan_tag tree trees node list_of_attribut
 Rootsymbol tree.
 
 tree ->
-        orphan_tag : io:fwrite("tree\n"), make_tree('$1', []).
+        orphan_tag : make_tree('$1', []).
 tree ->
-        opening_tag closing_tag : io:fwrite("tree\n"), make_tree('$1', []).
+        opening_tag closing_tag : make_tree('$1', []).
 tree ->
-        opening_tag trees closing_tag : io:fwrite("tree\n"), make_tree('$1', '$2').
+        opening_tag trees closing_tag : make_tree('$1', '$2').
 
 trees ->
-        tree : io:fwrite("trees\n"), ['$1'].
+        tree : ['$1'].
 trees ->
-        trees tree : io:fwrite("trees\n"), ['$2' | '$1'].
+        trees tree : ['$2' | '$1'].
 
 opening_tag ->
-        open identifier close : io:fwrite("opening tag\n"), tag('$2', #{}).
+        open identifier close : tag('$2', #{}).
 opening_tag ->
-        open identifier list_of_attributes close : io:fwrite("opening tag\n"), tag('$2', '$3').
+        open identifier list_of_attributes close : tag('$2', '$3').
 
 closing_tag -> 
-        open slash identifier close : io:fwrite("closing tag\n"), tag('$3', #{}).
+        open slash identifier close : tag('$3', #{}).
 
 orphan_tag -> 
-        open identifier slash close : io:fwrite("orphan tag\n"), tag('$2', #{}).
+        open identifier slash close : tag('$2', #{}).
 orphan_tag -> 
-        open identifier list_of_attributes slash close : io:fwrite("orphan tag\n"), tag('$2', '$3').
+        open identifier list_of_attributes slash close : tag('$2', '$3').
 
 list_of_attributes -> 
         attribute : '$1'.
