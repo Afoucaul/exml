@@ -1,7 +1,7 @@
 Definitions.
 
 WHITESPACE=[\s\t\r\n]+
-IDENTIFIER=[a-zA-Z]+(:[a-zA-Z]*)?
+IDENTIFIER=[a-zA-Z]\w*
 STRING="([^"\\]|\\.)*"
 
 

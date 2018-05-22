@@ -73,4 +73,15 @@ defmodule ExMLTest do
       ]
     }
   end
+
+  test "textual content" do
+    tree = ExML.parse(~S(
+      <a>hello</a>
+    ))
+    assert tree == {
+      "a", %{}, [
+        {"t", %{"text" => "hello"}, []}
+      ]
+    }
+  end
 end
